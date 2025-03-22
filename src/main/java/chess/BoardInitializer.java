@@ -12,7 +12,7 @@ public class BoardInitializer {
 
     public Board generateBoard() {
         Board board = new Board();
-//        putPawn(board);
+        putPawn(board);
         putRook(board);
         putKnight(board);
         putBishop(board);
