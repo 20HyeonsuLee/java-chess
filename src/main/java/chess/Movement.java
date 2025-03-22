@@ -53,4 +53,8 @@ public enum Movement {
     public boolean isCrossOneStep() {
         return Math.abs(x) + Math.abs(y) == 2 && Math.abs(x) == 1 && Math.abs(y) == 1;
     }
+
+    public boolean isMoveThreeStep() {
+        return Math.abs(x) + Math.abs(y) == 3;
+    }
 }

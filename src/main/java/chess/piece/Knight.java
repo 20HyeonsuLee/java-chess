@@ -4,9 +4,7 @@ import chess.Board;
 import chess.Color;
 import chess.Movement;
 import chess.Position;
-import java.util.Deque;
-import java.util.HashSet;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -18,29 +16,15 @@ public class Knight extends Piece {
 
     @Override
     public Set<Position> getMovablePositions() {
-        return getKnightMoveablePositions().stream()
-                .filter(position -> !board.existSameTeam(position, getColor()))
+        return Arrays.stream(Movement.values())
+                .filter(Movement::isMoveThreeStep)
+                .filter(movement -> canMove(movement, getPosition()))
+                .map(getPosition()::move)
                 .collect(Collectors.toSet());
     }
 
-    private Set<Position> getKnightMoveablePositions() {
-        Deque<Movement> queue = new LinkedList<>();
-        queue.add(Movement.UP_UP_LEFT);
-        queue.add(Movement.UP_UP_RIGHT);
-        queue.add(Movement.DOWN_DOWN_LEFT);
-        queue.add(Movement.DOWN_DOWN_RIGHT);
-        queue.add(Movement.LEFT_LEFT_DOWN);
-        queue.add(Movement.LEFT_LEFT_UP);
-        queue.add(Movement.RIGHT_RIGHT_DOWN);
-        queue.add(Movement.RIGHT_RIGHT_UP);
-        Set<Position> movablePositions = new HashSet<>();
-        while(!queue.isEmpty()) {
-            Movement movement = queue.poll();
-            if (getPosition().canMove(movement)) {
-                movablePositions.add(getPosition().move(movement));
-            }
-        }
-        return movablePositions;
+    private boolean canMove(Movement movement, Position currentPosition) {
+        return currentPosition.canMove(movement) && !board.existSameTeam(currentPosition.move(movement), getColor());
     }
 
     @Override
